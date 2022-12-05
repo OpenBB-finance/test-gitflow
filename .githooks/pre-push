@@ -9,7 +9,7 @@ if ! [[ $BRANCH =~ $REGEX ]]; then
   echo "Please rename your branch with $REGEX syntax examples below:"
   echo ""
   echo "feature/feature-name"
-  echo "release/release-name"
+  echo "release/2.0.0"
   echo "hotfix/hotfix-name"
   echo ""
   exit 1
