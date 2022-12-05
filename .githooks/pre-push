@@ -6,7 +6,11 @@ REGEX="^(main|develop|((feature|release|hotfix)\/[A-z0-9].+))$"
 if ! [[ $BRANCH =~ $REGEX ]]; then
   echo ""
   echo "Your commit was rejected due to branching name"
-  echo "Please rename your branch with $REGEX syntax"
+  echo "Please rename your branch with $REGEX syntax examples below:"
+  echo ""
+  echo "feature/feature-name"
+  echo "release/release-name"
+  echo "hotfix/hotfix-name"
   echo ""
   exit 1
 fi
