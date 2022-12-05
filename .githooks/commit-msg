@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Set the active main branch
+MAIN_BRANCH="main"
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+# only check commit messages on main development branch
+if [ "$current_branch" != "$MAIN_BRANCH" ]; then
+  exit 0
+fi
+
+# regex to validate in commit msg
+commit_regex='(:[0-9]\.[0-9]\.[0-9])'
+error_msg="Aborting commit. Your commit message is missing the version tag eg '2.0.0'"
+
+if ! grep -iqE "$commit_regex" "$1"; then
+  echo "$error_msg" >&2
+  exit 1
+fi
