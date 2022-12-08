@@ -3,7 +3,7 @@ name: Allow release and hotfix pull requests
 on:
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - .github/workflows/allow-release-hotfix-pull-requests.yml
 
