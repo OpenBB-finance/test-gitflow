@@ -1,0 +1,31 @@
+name: Main Branch protection
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  enforce_protection:
+    runs-on: ubuntu-latest
+    steps:
+      # Check if the pull request has been approved by at least one person
+      - name: Check if pull request has been approved
+        if: github.event.pull_request.reviews.total_count == 0
+        run: exit 1
+
+      # Check if the pull request has been reviewed by at least one person
+      - name: Check if pull request has been reviewed
+        if: github.event.pull_request.review.state != 'approved'
+        run: exit 1
+  
+  check_branch_name:
+    runs-on: ubuntu-latest
+    steps:
+      # Check if the branch name matches the pattern "release/x.y.z" or "hotfix/*"
+      - name: Check branch name
+        run: |
+          if ! [[ "${{ github.event.pull_request.head.ref }}" =~ ^(release/[0-9]+\.[0-9]+\.[0-9]+|hotfix/) ]]; then
+            echo "Branch name does not match the pattern 'release/x.y.z' or 'hotfix/*'"
+            exit 1
+          fi
+          echo "Branch name matches the pattern 'release/x.y.z' or 'hotfix/*'"
