@@ -1,4 +1,4 @@
-name: Main Branch protection
+name: main branch protection
 
 on:
   pull_request:
@@ -18,7 +18,7 @@ jobs:
         if: github.event.pull_request.review.state != 'approved'
         run: exit 1
   
-  check_branch_name:
+  allow_release_hotfix_pull_requests:
     runs-on: ubuntu-latest
     steps:
       # Check if the branch name matches the pattern "release/x.y.z" or "hotfix/*"
