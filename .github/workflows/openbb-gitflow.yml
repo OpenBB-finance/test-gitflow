@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   check-branch-name:
-    name: Check branch names on all branches.
+    name: Enforce branch names on all branches.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
