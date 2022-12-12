@@ -1,0 +1,38 @@
+on:
+  pull_request:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-branch-name:
+    name: Check branch names on all branches.
+    runs-on: ubuntu-latest
+    strategy:
+      concurrency: 5
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          echo "Branch name: $GITHUB_REF"
+          valid_branch_names=(
+            "refs/heads/main"
+            "refs/heads/develop"
+            "refs/heads/release/\d+.\d+.\d+.*"
+            "refs/heads/hotfix/*"
+            "refs/heads/feature/*"
+          )
+          valid=false
+          for pattern in "${valid_branch_names[@]}"; do
+            if [[ "$GITHUB_REF" =~ $pattern ]]; then
+              valid=true
+              break
+            fi
+          done
+          if $valid; then
+            echo "Branch name is valid."
+          else
+            echo "Branch name is invalid."
+            exit 1
+          fi
