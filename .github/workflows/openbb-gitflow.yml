@@ -12,10 +12,6 @@ jobs:
   check-branch-name:
     name: Check branch names on all branches.
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch: [main, develop, release/\d+.\d+.\d+.*, hotfix/.*, feature/.*]
-        concurrency: [true, false]
     steps:
       - uses: actions/checkout@v2
       - run: |
