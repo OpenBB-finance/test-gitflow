@@ -3,6 +3,7 @@ name: OpenBB GitFlow
 on:
   pull_request:
   push:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
