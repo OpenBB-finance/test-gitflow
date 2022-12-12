@@ -1,0 +1,21 @@
+name: Check branch name
+
+on:
+  pull_request:
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        if [ "${GITHUB_REF}" == "refs/heads/main" ] ||
+           [ "${GITHUB_REF}" == "refs/heads/develop" ] ||
+           [ "${GITHUB_REF#refs/heads/release/\d+.\d+.\d+.*}" != "$GITHUB_REF" ] ||
+           [ "${GITHUB_REF#refs/heads/hotfix/}" != "$GITHUB_REF" ] ||
+           [ "${GITHUB_REF#refs/heads/feature/}" != "$GITHUB_REF" ]; then
+          echo "Branch name is valid."
+        else
+          echo "Branch name is invalid."
+          exit 1
+        fi
