@@ -5,4 +5,5 @@ This repository is a GitFlow repository. It is used to demonstrate the GitFlow w
 ~~~
 Created develop branch
 Test Branch Name
+Testing commit message
 ~~~
