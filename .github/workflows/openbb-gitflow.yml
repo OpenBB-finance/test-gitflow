@@ -2,7 +2,6 @@ name: OpenBB GitFlow
 
 on:
   pull_request:
-  push:
   workflow_dispatch:
 
 concurrency:
