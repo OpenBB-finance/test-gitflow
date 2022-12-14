@@ -37,60 +37,18 @@ jobs:
             echo "Branch name is invalid."
             exit 1
           fi
-    
-  restrict_branch_pull_requests:
-    name: Restrict pull requests to the main and develop branches.
+
+  release-pr-restriction:
+    name: Restrict any PRs to the release branch. Only allow PRs from the develop branch.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: |
           echo "Branch name: $GITHUB_REF"
-          if [[ "$GITHUB_REF" =~ ^refs/heads/(main|develop)$ ]]; then
-            echo "Branch name is valid."
-          else
-            echo "Branch name is invalid."
-            exit 1
+          if [[ "$GITHUB_REF" =~ "refs/heads/release/\d+.\d+.\d+.*" ]]; then
+            echo "This is a release branch."
+            if [[ "$GITHUB_BASE_REF" != "develop" ]]; then
+              echo "This PR is not from the develop branch."
+              exit 1
+            fi
           fi
-
-
-  check-commit-message:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Check commit message
-        run: |
-          COMMIT_MESSAGE=$(git log --format=%B -n 1)
-          if [[ $COMMIT_MESSAGE =~ :[0-9]\.[0-9]\.[0-9] ]]; then
-            echo "The commit message contains a version tag."
-          else
-            echo "The commit message is missing the version tag. Please add the version tag to the commit message. Example: :1.0.0"
-            exit 1
-          fi
-
-
-  # check_commit_message:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Check commit message
-  #     id: check_message
-  #     run: |
-  #       # Set the active main branch
-  #       MAIN_BRANCH="main"
-  #       CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
-  #       # Only check commit messages on main development branch
-  #       if [ "$CURRENT_BRANCH" != "$MAIN_BRANCH" ]; then
-  #         exit 0
-  #       fi
-
-  #       # Regular expression to validate version tag in commit message
-  #       COMMIT_REGEX='(:[0-9]\.[0-9]\.[0-9])'
-
-  #       # Error messages
-  #       ERROR_MSG="Error: Aborting commit. Your commit message is missing the version tag. \n Please add a version tag to your commit message. For example: 'fixing bug for forecasting :1.0.0'"
-
-  #       # Check commit message for version tag
-  #       if ! grep -iqE "$COMMIT_REGEX" "$1"; then
-  #         echo "$ERROR_MSG" 
-  #         exit 1
-  #       fi
