@@ -10,6 +10,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  enforce_reviewers:
+    runs-on: ubuntu-latest
+    steps:
+      # Check if the pull request has been approved and reviewed
+      - name: Check if pull request has been approved and reviewed
+        if: github.event.pull_request.reviews.total_count == 0 || github.event.pull_request.review.state != 'approved'
+        run: exit 1
+
   check-branch-name:
     name: Enforce branch names on all branches.
     runs-on: ubuntu-latest
