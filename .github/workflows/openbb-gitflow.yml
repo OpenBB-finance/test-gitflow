@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  enforce_reviewers:
+  check_pr_reviewers:
     runs-on: ubuntu-latest
     steps:
       # Check if the pull request has been approved and reviewed
