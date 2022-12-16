@@ -24,7 +24,7 @@ jobs:
           echo "Target branch: $TARGET_BRANCH"
 
           # Check if the source branch is a hotfix or release branch and the target branch is the main branch
-          if [[ "$SOURCE_BRANCH" =~ ^(hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+))$ ]] && [ "$TARGET_BRANCH" == "main" ]; then
+          if [[ "$SOURCE_BRANCH" =~ ^(hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]] && [ "$TARGET_BRANCH" == "main" ]; then
             echo "PR is from a hotfix/release branch and is targeting the main branch"
           else
             echo "PR is not from a hotfix/release branch"
