@@ -3,7 +3,6 @@
 GitFlow is a branching model for Git that makes it easier for teams to collaborate on projects using the Git version control system. This guide explains how to implement GitFlow for an open source project.
 
 ## Steps
-
 1. Create a new branch called `feature/<feature-name>` from the `develop` branch for each new feature that you want to add to the project. This is where you will do your work on the feature.
 ~~~
 git checkout -b feature/<feature-name> develop
