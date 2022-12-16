@@ -27,5 +27,5 @@ jobs:
             echo "Branch name is valid"
           else
             echo "Branch name is invalid"
-            exit 1
+            npx github-script -f .github/scripts/add-review-comment.js "$GITHUB_EVENT_PATH" "Invalid branch name. Branches must follow the gitflow naming convention to be allowed to merge into the develop branch."
           fi
