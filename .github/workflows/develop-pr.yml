@@ -1,0 +1,24 @@
+name: Develop branch gitflow
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  branch_name_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        run: |
+          if [[ "${GITHUB_REF}" =~ ^(refs/heads/main|refs/heads/feature/.*|refs/heads/hotfix/.*|refs/heads/release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]]; then
+            echo "Branch name is valid"
+          else
+            echo "Branch name is invalid"
+            exit 1
+          fi
