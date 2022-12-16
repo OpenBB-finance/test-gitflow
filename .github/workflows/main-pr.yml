@@ -29,11 +29,6 @@ jobs:
           if [[ "$source_branch" =~ $hotfix_or_release_pattern ]] && [ "$target_branch" == "main" ]; then
             echo "PR is from a hotfix or release branch and targeting the main branch"
           else
-            echo "PR is not from a hotfix or release branch"
-            # Use the GitHub REST API to add a review comment to the pull request
-            curl -X POST \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Content-Type: application/json" \
-              -d "{\"body\":\"Pull requests must be from a hotfix or release branch and target the main branch.\"}" \
-              "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}/reviews"
+            echo "PR is not from a hotfix or release branch. Pull requests must be from a hotfix or release branch and target the main branch"
+            exit 1
           fi
