@@ -1,0 +1,32 @@
+name: Main branch gitflow
+
+on:
+  pull_request:
+    types: [opened, synchronize]   
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  main_branch_pr_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR source and target branches
+        run: |
+          # Get the source and target branches for the PR
+          SOURCE_BRANCH=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
+          TARGET_BRANCH=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
+
+          echo "Source branch: $SOURCE_BRANCH"
+          echo "Target branch: $TARGET_BRANCH"
+
+          # Check if the source branch is a hotfix or release branch and the target branch is the main branch
+          if [[ "$SOURCE_BRANCH" =~ ^(hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]] && [ "$TARGET_BRANCH" == "main" ]; then
+            echo "PR is from a hotfix/release branch and is targeting the main branch"
+          else
+            echo "PR is not from a hotfix/release branch"
+            exit 1
+          fi
