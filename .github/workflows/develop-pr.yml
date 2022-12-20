@@ -26,6 +26,6 @@ jobs:
           if [[ "$SOURCE_BRANCH" =~ ^(main|feature/.*|hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]]; then
             echo "Branch name is valid"
           else
-            echo "Branch name is invalid"
-            npx github-script -f .github/scripts/add-review-comment.js "$GITHUB_EVENT_PATH" "Invalid branch name. Branches must follow the gitflow naming convention to be allowed to merge into the develop branch."
+            echo "Invalid branch name. Branches must follow the gitflow naming convention to be allowed to merge into the develop branch."
+            exit 1
           fi
