@@ -6,6 +6,12 @@ env:
   OPENBB_USE_ION: false
   OPENBB_USE_PROMPT_TOOLKIT: false
   PIP_DEFAULT_TIMEOUT: 100
+  pythonLocation: /opt/hostedtoolcache/Python/3.9.16/x64
+  PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.16/x64/lib/pkgconfig
+  Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.16/x64
+  Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.16/x64
+  Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.16/x64
+  LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.16/x64/lib
 
 on:
   push:
