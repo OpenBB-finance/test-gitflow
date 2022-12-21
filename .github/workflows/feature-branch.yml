@@ -15,8 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
-      - &checkout
-        name: Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # actions/checkout v3.0.2
 
       - name: Setup Python 3.9
@@ -48,7 +47,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
-      - <<: *checkout
+      - uses: actions/checkout@v3
+        name: Check out the code
       - name: Lint Code Base
         uses: docker://avtodev/markdown-lint:v1
         with:
