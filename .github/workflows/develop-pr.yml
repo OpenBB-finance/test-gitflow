@@ -80,7 +80,7 @@ jobs:
   # Run tests on base Python version
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
-    needs: main-branch-pr-check
+    needs: [branch-name-check]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
