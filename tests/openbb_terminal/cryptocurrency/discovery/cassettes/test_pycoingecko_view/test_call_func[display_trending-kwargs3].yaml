@@ -1,0 +1,88 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://api.coingecko.com/api/v3/search/trending
+  response:
+    body:
+      string: !!binary |
+        H4sIAOBLYWMAA5yW227iMBCG7/sUVa452ONDYm5W9LAI9UAvqtVKqwoZcGmWhCASqlYV717HDiEp
+        gaoWF0A8/ufPfJlxPs68aRIuU693/u/DCzMVez39PfN63kRmWaTa4fI5XIbZu9cykeN8DXzERctb
+        yljpwAsTeD7cB6bv8SSJ9NLwov+o/8dyvVDZeCpX47VcLryeQKTlZS+beKKDXrJslfa6XZmmKks7
+        eZa5mi4S/SvuGnfdMJZzlXZN3q7Z1w21v3GUzJPOajn/hTnH3KcUsTx9LKPIQdjsOyUcyfVcOQib
+        fScdR5t5Y8lX63CqxpNs6vVwh3JGQRDECPapwES1ka/3TpO1NoW229YXgrNEu9JuquhYie1qv1ry
+        uhoNrpt4BS60WEFqZ8PeNqO+LwAYdwLFCkjHNX/OiBV8Tvi0eCr1rHDhHU0S+T5BQIAEHGssvMSC
+        D7HIVZaktXbilO259IvlEkr/obGH8i0OLZTnKsAYI+N1slnOdo8kD4jgINyayEhbPielHdrISFtM
+        p11bUrsSVzChDkKICMDCJ5wC5xTpT8kJDjnFKpOvchNl7WwtZ6pGjFEEJbG7XeD5YxFYsrv787eJ
+        HUYIO9HL8xb04te33f0jEiAfAjdqRtJSa5R0oGUkLa1ml5bSYYG/8sJcIEDU55whoFiIkhc5Mu5e
+        ZH3eAQ8gqM+8ImQ/9C6bEBEm3PpL56sOvjxb5/9K2RKAAJ9ix/bKlSvj74iyS3flypUheMxzZQwW
+        RaydT4gDBxxgTYzhgNPa+UQPgT1HySKswsoPRF7C+n07uhlWQe0uHLACcGJl0hWsHu4HY3O5eFop
+        wQHVc8IJlRW2qE4I/5yUFbakTjm2oHb1rUBinSAQEIDmKjAw1caoJMQOCc1lJGuAgApSAhrY1ZLP
+        oH/bb5x24PT+YJIVeHLp9uVoeD+4vrwZFXeM9IlLKHF75bPqltF36g6gjLoF9a13S6uodQUW6BEI
+        mAmOfc4Cps+s2qsF326fWmeeetPNqH2Yd/ins+0nAAAA//8DAAGREtfTCwAA
+    headers:
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept, Authorization
+      Access-Control-Allow-Methods:
+      - POST, PUT, DELETE, GET, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - link, per-page, total
+      Access-Control-Request-Method:
+      - '*'
+      Alternate-Protocol:
+      - 443:npn-spdy/2
+      CF-Cache-Status:
+      - EXPIRED
+      CF-RAY:
+      - 763611dd3aca5d2b-LIS
+      Cache-Control:
+      - public, max-age=120
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 01 Nov 2022 16:40:01 GMT
+      ETag:
+      - W/"b811cab7d278d187099a533eaeccd5e5"
+      Expires:
+      - Tue, 01 Nov 2022 16:42:01 GMT
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - b66484aa-98e0-48fb-a75d-f19a512f69e5
+      X-Runtime:
+      - '0.033346'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1
