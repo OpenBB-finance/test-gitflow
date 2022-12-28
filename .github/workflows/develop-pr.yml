@@ -120,12 +120,12 @@ jobs:
           source $VENV
           pip list
 
-      - name: Run tests
-        env:
-          MPLBACKEND: Agg
-        run: |
-          source $VENV
-          pytest tests/ --optimization
+      # - name: Run tests
+      #   env:
+      #     MPLBACKEND: Agg
+      #   run: |
+      #     source $VENV
+      #     pytest tests/ --optimization
 
       - name: Start Terminal and exit
         run: |
