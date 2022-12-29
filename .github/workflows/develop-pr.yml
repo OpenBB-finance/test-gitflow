@@ -98,7 +98,7 @@ jobs:
   # Run tests on all Python versions on multiple OSes
   tests-python:
     name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
-    needs: base-test
+    needs: [base-test, check-python-changes]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
