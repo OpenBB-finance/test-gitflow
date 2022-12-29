@@ -54,7 +54,7 @@ jobs:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: check-python-changes
     runs-on: ubuntu-latest
-    if: github.event.pull_request.base.ref == 'develop' && steps.check-python-changes.outputs.python-changes == 'true'
+    if: github.event.pull_request.base.ref == 'develop' && check-python-changes.outputs.python-changes == 'true'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -108,7 +108,7 @@ jobs:
         exclude:
           - os: ubuntu-latest
             python-version: "3.9"
-    if: github.event.pull_request.base.ref == 'develop' && steps.check-python-changes.outputs.python-changes == 'true'
+    if: github.event.pull_request.base.ref == 'develop' && check-python-changes.outputs.python-changes == 'true'
 
     steps:
       - name: Checkout Code
