@@ -31,11 +31,30 @@ jobs:
             exit 1
           fi
 
-  # Run tests on base Python version
+  # Check for changes to Python code to avoid running tests unnecessarily
+  check-python-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      python-changes: ${{ steps.python-changes.outputs.python-changes }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Check for changes to Python code
+        id: python-changes
+        run: |
+          if git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -qE '.*\.py$'; then
+            echo "::set-output name=python-changes::true"
+          else
+            echo "::set-output name=python-changes::false"
+          fi
+
+  # Run tests on base Python version if Python code has changed
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
-    needs: branch-name-check
+    needs: check-python-changes
     runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'develop' && steps.check-python-changes.outputs.python-changes == 'true'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -76,6 +95,7 @@ jobs:
           source $VENV
           python terminal.py
 
+  # Run tests on all Python versions on multiple OSes
   tests-python:
     name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: base-test
@@ -83,8 +103,12 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.10"]
-        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.8", "3.9", "3.10"]
+        os: [ubuntu-latest]
+        exclude:
+          - os: ubuntu-latest
+            python-version: "3.9"
+    if: github.event.pull_request.base.ref == 'develop' && steps.check-python-changes.outputs.python-changes == 'true'
 
     steps:
       - name: Checkout Code
@@ -120,12 +144,12 @@ jobs:
           source $VENV
           pip list
 
-      # - name: Run tests
-      #   env:
-      #     MPLBACKEND: Agg
-      #   run: |
-      #     source $VENV
-      #     pytest tests/ --optimization
+      - name: Run tests
+        env:
+          MPLBACKEND: Agg
+        run: |
+          source $VENV
+          pytest tests/ --optimization
 
       - name: Start Terminal and exit
         run: |
