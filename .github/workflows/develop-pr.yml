@@ -62,6 +62,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Show Output result for python-changes
+        run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
+
       - name: Setup Python 3.9
         uses: actions/setup-python@v4
         with:
