@@ -48,11 +48,14 @@ jobs:
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
           fi
+      
+      - name: Show Output result for python-changes
+        run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
 
   # Run tests on base Python version if Python code has changed
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
-    needs: check-python-changes
+    needs: [branch-name-check, check-python-changes]
     runs-on: ubuntu-latest
     if: github.event.pull_request.base.ref == 'develop' && ${{ needs.check-python-changes.outputs.python-changes }} == 'true'
     steps:
