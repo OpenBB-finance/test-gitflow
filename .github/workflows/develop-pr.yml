@@ -44,9 +44,9 @@ jobs:
         id: python-changes
         run: |
           if git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -qE '.*\.py$'; then
-            echo "::set-output name=python-changes::true"
+            echo "python-changes=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=python-changes::false"
+            echo "python-changes=false" >> $GITHUB_OUTPUT
           fi
 
   # Run tests on base Python version if Python code has changed
@@ -54,7 +54,7 @@ jobs:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: check-python-changes
     runs-on: ubuntu-latest
-    if: github.event.pull_request.base.ref == 'develop' && check-python-changes.outputs.python-changes == 'true'
+    if: github.event.pull_request.base.ref == 'develop' && ${{ needs.check-python-changes.outputs.python-changes }} == 'true'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -108,7 +108,7 @@ jobs:
         exclude:
           - os: ubuntu-latest
             python-version: "3.9"
-    if: github.event.pull_request.base.ref == 'develop' && check-python-changes.outputs.python-changes == 'true'
+    if: github.event.pull_request.base.ref == 'develop' && steps.check-python-changes.outputs.python-changes == 'true'
 
     steps:
       - name: Checkout Code
