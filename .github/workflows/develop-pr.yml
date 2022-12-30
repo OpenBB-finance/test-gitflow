@@ -57,8 +57,7 @@ jobs:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: [branch-name-check, check-python-changes]
     runs-on: ubuntu-latest
-    if: ${{ steps.python-changes.outputs.python-changes }} == 'true'
-
+    if: ${{needs.check-python-changes.outputs.python-changes}} != 'false'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
