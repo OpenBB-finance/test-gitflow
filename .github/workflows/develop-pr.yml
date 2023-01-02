@@ -35,7 +35,7 @@ jobs:
   # Run tests on base Python version if Python code has changed
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
-    needs: [branch-name-check, check-python-changes]
+    needs: [branch-name-check]
     runs-on: ubuntu-latest
     outputs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
@@ -105,7 +105,7 @@ jobs:
   # Run tests on all Python versions on multiple OSes
   tests-python:
     name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
-    needs: [base-test, check-python-changes]
+    needs: [base-test]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
