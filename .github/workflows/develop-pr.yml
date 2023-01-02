@@ -46,7 +46,7 @@ jobs:
       - name: Check for changes to Python code
         id: python-changes
         run: |
-          if git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -qE '.*\.py$'; then
+          if git diff --name-only $SOURCE_BRANCH $TARGET_BRANCH | grep -qE '.*\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
@@ -122,7 +122,7 @@ jobs:
       - name: Check for changes to Python code
         id: python-changes
         run: |
-          if git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -qE '.*\.py$'; then
+          if git diff --name-only $SOURCE_BRANCH $TARGET_BRANCH | grep -qE '.*\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
