@@ -1,0 +1,7 @@
+                          Relationship      Transaction #Shares    Cost  Value ($) #Shares Total           Insider Trading       SEC Form 4
+Date                                                                                                                                       
+Sep 08                        Director  Option Exercise  26,250   14.99    393,488        31,650  Wilson-Thompson Kathleen  Sep 12 09:44 PM
+Sep 08                        Director             Sale  26,250  278.93  7,321,912         5,400  Wilson-Thompson Kathleen  Sep 12 09:44 PM
+Sep 06  SVP Powertrain and Energy Eng.             Sale   1,298  269.39    349,799        62,988          Baglino Andrew D  Sep 07 08:33 PM
+Sep 06         Chief Financial Officer             Sale   7,550  269.39  2,034,007       196,527          Kirkhorn Zachary  Sep 07 08:29 PM
+Sep 06        Chief Accounting Officer             Sale   3,755  269.39  1,011,548        91,324            Taneja Vaibhav  Sep 07 09:04 PM

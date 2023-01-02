@@ -1,0 +1,8 @@
+
+
+2 Failed downloads:
+- CGEN: No data found for this date range, symbol may be delisted
+- SGFY: No data found for this date range, symbol may be delisted
+Empty DataFrame
+Columns: []
+Index: []

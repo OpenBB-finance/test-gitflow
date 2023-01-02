@@ -1,0 +1,26 @@
+    overview           show a market overview of either indices, bonds or currencies   [WallStreetJournal]
+    futures            display a futures and commodities overview                      [WallStreetJournal, Finviz]
+    map                S&P500 index stocks map                                         [Finviz]
+    bigmac             The Economist Big Mac index                                     [Nasdaq]
+    ycrv               show sovereign yield curves                                     [FRED]
+    events             show economic calendar                                          [Nasdaq]
+    edebt              show external debt statistics for various countries             [Wikipedia]
+
+    rtps               real-time performance sectors                                   [AlphaVantage]
+    valuation          valuation of sectors, industry, country                         [Finviz]
+    performance        performance of sectors, industry, country                       [Finviz]
+    spectrum           spectrum of sectors, industry, country                          [Finviz]
+
+Databases:
+    macro              collect macro data for a country or countries                   [EconDB]
+    treasury           obtain U.S. treasury rates                                      [EconDB]
+    fred               collect macro data from FRED based on a series ID               [FRED]
+    index              find and plot any (major) index on the market                   [YahooFinance]
+
+Stored datasets: 
+
+    eval               create new series by performing operations on loaded data
+    plot               plot data from the above commands together
+
+>   qa                 Open quantitative analysis menu with stored data
+

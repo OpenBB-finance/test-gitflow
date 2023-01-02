@@ -27,73 +27,43 @@ jobs:
           if [[ "$SOURCE_BRANCH" =~ ^(main|feature/.*|hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]]; then
             echo "Branch name is valid"
           else
-            echo "Invalid branch name. Branches must follow the gitflow naming convention to be allowed to merge into the develop branch."
+            echo "Invalid branch name. Branches must follow the GitFlow naming convention to be allowed to merge into the develop branch."
             exit 1
           fi
 
-  # Run linters on base Python version
-  linting:
-    name: General Linting
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # actions/checkout v3.0.2
-
-      - name: Setup Python 3.9
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-          architecture: x64
-
-      - uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-linting-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: ${{ runner.os }}-linting-${{ hashFiles('**/poetry.lock') }}
-
-      - run: pip install bandit black codespell flake8 mypy==0.982 pyupgrade safety pylint==2.15.2 packaging==22
-      - run: pip install types-pytz types-requests types-termcolor types-tabulate types-PyYAML types-python-dateutil types-setuptools types-six
-      - run: bandit -x ./tests -r . || true
-      #- run: black --diff --check .
-      - run: codespell --ignore-words-list=commun,statics,ro,zar,zlot,jewl,ba,buil,coo,ether,hist,hsi,mape,navagation,operatio,pres,ser,yeld,shold,ist,varian,datas,ake,creat,vie,hel,ket,toke,certi,buidl,ot,te --quiet-level=2 --skip=./tests,.git,*.css,*.csv,*.html,*.ini,*.ipynb,*.js,*.json,*.lock,*.scss,*.txt,*.yaml,./build/pyinstaller,./website/config.toml
-      - run: flake8 . --count --ignore=E203,W503 --max-line-length=122 --show-source --statistics --exclude ./build/pyinstaller,./website/content
-      - run: mypy --ignore-missing-imports openbb_terminal
-      - run: shopt -s globstar && pyupgrade --py38-plus **/*.py
-      - run: safety check
-      - run: |
-          pylint terminal.py openbb_terminal tests
-
-  # Run Markdown link checker
-  markdown-link-check:
-    name: Markdown Linting
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    steps:
-      - uses: actions/checkout@v3
-        name: Check out the code
-      - name: Lint Code Base
-        uses: docker://avtodev/markdown-lint:v1
-        with:
-          args: "./*.md ./changelogs/*.md ./openbb_terminal/**/*.md ./discordbot/**/*.md"
-
-  # Run tests on base Python version
+  # Run tests on base Python version if Python code has changed
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
-    needs: branch-name-check
+    needs: [branch-name-check]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    outputs:
+      python-changes: ${{ steps.python-changes.outputs.python-changes }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Check for changes to Python code to avoid running tests unnecessarily
+      - name: Check for changes to Python code
+        id: python-changes
+        run: |
+          if git diff --name-only $SOURCE_BRANCH $TARGET_BRANCH | grep -qE '.*\.py$'; then
+            echo "python-changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "python-changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Show Output result for python-changes
+        run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}" 
+
       - name: Setup Python 3.9
+        if: steps.python-changes.outputs.python-changes == 'true'
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
           architecture: x64
 
       - name: Install Poetry
+        if: steps.python-changes.outputs.python-changes == 'true'
         uses: snok/install-poetry@v1
         with:
           version: 1.1.13
@@ -101,6 +71,7 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Load cached venv
+        if: steps.python-changes.outputs.python-changes == 'true'
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
@@ -108,10 +79,11 @@ jobs:
           key: venv-${{ runner.os }}-v1-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true' && steps.python-changes.outputs.python-changes == 'true'
         run: poetry install --no-interaction -E optimization
 
       - name: Run tests
+        if: steps.python-changes.outputs.python-changes == 'true'
         env:
           MPLBACKEND: Agg
         run: |
@@ -119,32 +91,49 @@ jobs:
           pytest tests/ --optimization
 
       - name: Start Terminal and exit
+        if: steps.python-changes.outputs.python-changes == 'true'
         run: |
           source $VENV
           python terminal.py
 
+  # Run tests on all Python versions on multiple OSes
   tests-python:
     name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
-    needs: base-test
+    needs: [base-test]
+    outputs:
+      python-changes: ${{ steps.python-changes.outputs.python-changes }}
     runs-on: ${{ matrix.os }}
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.10"]
-        os: [ubuntu-latest, macos-latest]
-
+        python-version: ["3.8", "3.9", "3.10"]
+        os: [ubuntu-latest]
+        exclude:
+          - os: ubuntu-latest
+            python-version: "3.9"
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Check for changes to Python code to avoid running tests unnecessarily
+      - name: Check for changes to Python code
+        id: python-changes
+        run: |
+          if git diff --name-only $SOURCE_BRANCH $TARGET_BRANCH | grep -qE '.*\.py$'; then
+            echo "python-changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "python-changes=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup Python ${{ matrix.python-version }}
+        if: steps.python-changes.outputs.python-changes == 'true'
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
       - name: Install Poetry
+        if: steps.python-changes.outputs.python-changes == 'true'
         uses: snok/install-poetry@v1
         with:
           version: 1.1.13
@@ -152,6 +141,7 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Load cached venv
+        if: steps.python-changes.outputs.python-changes == 'true'
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
@@ -159,16 +149,18 @@ jobs:
           key: venv-${{ runner.os }}-v1-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true' && steps.python-changes.outputs.python-changes == 'true'
         run: poetry install --no-interaction -E optimization
 
       - name: List installed packages
+        if: steps.python-changes.outputs.python-changes == 'true'
         shell: bash -l {0}
         run: |
           source $VENV
           pip list
 
       - name: Run tests
+        if: steps.python-changes.outputs.python-changes == 'true'
         env:
           MPLBACKEND: Agg
         run: |
@@ -176,6 +168,7 @@ jobs:
           pytest tests/ --optimization
 
       - name: Start Terminal and exit
+        if: steps.python-changes.outputs.python-changes == 'true'
         run: |
           source $VENV
           python terminal.py

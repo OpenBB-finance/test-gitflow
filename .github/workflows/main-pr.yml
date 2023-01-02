@@ -45,7 +45,6 @@ jobs:
   linting:
     name: General Linting
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Checkout Code
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # actions/checkout v3.0.2
@@ -78,7 +77,6 @@ jobs:
   markdown-link-check:
     name: Markdown Linting
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - uses: actions/checkout@v3
         name: Check out the code
@@ -92,7 +90,6 @@ jobs:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: main-branch-pr-check
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -138,7 +135,6 @@ jobs:
     name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: base-test
     runs-on: ${{ matrix.os }}
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: true
       matrix:
@@ -198,7 +194,6 @@ jobs:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: base-test
     runs-on: ${{ matrix.os }}-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
       matrix:

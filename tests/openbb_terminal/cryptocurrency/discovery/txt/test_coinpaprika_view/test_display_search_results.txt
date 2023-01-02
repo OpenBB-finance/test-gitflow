@@ -1,0 +1,11 @@
+                                          id                                 name    category
+42           bens-baby-ethereum-name-service           Baby Ethereum Name Service  currencies
+9   best-bitcoin-and-ethereum-standard-token  Bitcoin and Ethereum Standard Token  currencies
+37                      ddeth-daddy-ethereum                       Daddy Ethereum  currencies
+25                            eai-ethereumai                           EthereumAI  currencies
+43                      eban-ethereum-banana                      Ethereum Banana  currencies
+4                        ecash-ethereum-cash                        Ethereum Cash  currencies
+20               ecell-ethereum-cell-network                Ethereum Cell Network  currencies
+36                  ect-ethereum-chain-token                 Ethereum Chain Token  currencies
+35                          ecum-ethereumcum                          EthereumCum  currencies
+32                        eer-ethereum-erush                       Ethereum eRush  currencies

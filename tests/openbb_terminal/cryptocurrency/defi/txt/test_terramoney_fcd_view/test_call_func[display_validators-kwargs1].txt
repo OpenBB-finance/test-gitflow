@@ -1,0 +1,11 @@
+                                  Account address          Validator name Tokens amount  Voting power %  Commission rate %    Status  Uptime %
+161  terra1r7zwfk0lx6kuy8r03ewdchaea3ssy5vudns2sy             blocksteady           109             0.0               10.0    jailed     100.0
+220  terra1rnthk3l73p0sqdwg5a8j05zynzguzst6tu83lt            atomicwallet             1             0.0               10.0  inactive     100.0
+219  terra1dkcfqaym0xm8wh9v2gn6y9drq284assg324cp5               RockStake             0             0.0               10.0    jailed     100.0
+218  terra1vhm0l52y83vsqr60vt7vhxgsjlfyhf3h25y532           Tavis Digital          2.3K             0.0                7.0    jailed     100.0
+217  terra1revygmqdv3uk0aszkd2wg3nz3jsqwprfre4rmk                  DSPool             0             0.0                5.0  inactive     100.0
+216  terra1qr8ewxc0xx2vuq7jhe2evsde2k4c4cku6p9hpy          Secure Secrets            56             0.0                3.0  inactive     100.0
+215  terra1f699dxaftg4pxfqtwzyreyxgaznk922zues259             Just-Mining            24             0.0              100.0  inactive     100.0
+214  terra1qxrrf73tf7agksyxs6v6zj2nrce63jk0p4a8g2                 Celsius             3             0.0                4.0  inactive     100.0
+221  terra1d6r83n848v2juv6qal7a0r3n9n6vmpqjw42uj9  porn addicts anonymous             1             0.0               51.0  inactive     100.0
+213  terra1kl9alpr77qfjze4quf62ycngg6fkka0tthn6r6                  Bitrue          3.7K             0.0                0.0  inactive     100.0
