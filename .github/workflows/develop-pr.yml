@@ -53,10 +53,7 @@ jobs:
           fi
 
       - name: Show Output result for python-changes
-        run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
-
-      - name: Show Output result for python-changes
-        run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
+        run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}" 
 
       - name: Setup Python 3.9
         if: steps.python-changes.outputs.python-changes == 'true'
