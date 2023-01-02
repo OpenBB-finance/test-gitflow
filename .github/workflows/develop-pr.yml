@@ -31,15 +31,21 @@ jobs:
             exit 1
           fi
 
-  # Check for changes to Python code to avoid running tests unnecessarily
-  check-python-changes:
+
+  # Run tests on base Python version if Python code has changed
+  base-test:
+    name: Base Tests - Ubuntu-latest - Python 3.9
+    needs: [branch-name-check, check-python-changes]
     runs-on: ubuntu-latest
     outputs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
+    
+    
+      # Check for changes to Python code to avoid running tests unnecessarily
       - name: Check for changes to Python code
         id: python-changes
         run: |
@@ -48,30 +54,22 @@ jobs:
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Show Output result for python-changes
         run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
-
-  # Run tests on base Python version if Python code has changed
-  base-test:
-    name: Base Tests - Ubuntu-latest - Python 3.9
-    needs: [branch-name-check, check-python-changes]
-    runs-on: ubuntu-latest
-    if: ${{needs.check-python-changes.outputs.python-changes}} != 'false'
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
 
       - name: Show Output result for python-changes
         run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
 
       - name: Setup Python 3.9
+        if: steps.python-changes.outputs.python-changes == 'false'
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
           architecture: x64
 
       - name: Install Poetry
+        if: steps.python-changes.outputs.python-changes == 'false'
         uses: snok/install-poetry@v1
         with:
           version: 1.1.13
@@ -79,6 +77,7 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Load cached venv
+        if: steps.python-changes.outputs.python-changes == 'false'
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
@@ -90,6 +89,7 @@ jobs:
         run: poetry install --no-interaction -E optimization
 
       - name: Run tests
+        if: steps.python-changes.outputs.python-changes == 'false'
         env:
           MPLBACKEND: Agg
         run: |
@@ -97,6 +97,7 @@ jobs:
           pytest tests/ --optimization
 
       - name: Start Terminal and exit
+        if: steps.python-changes.outputs.python-changes == 'false'
         run: |
           source $VENV
           python terminal.py
