@@ -58,6 +58,7 @@ jobs:
   # Run linters on base Python version
   linting:
     name: General Linting
+    needs: main-branch-pr-check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -90,6 +91,7 @@ jobs:
   # Run Markdown link checker
   markdown-link-check:
     name: Markdown Linting
+    needs: main-branch-pr-check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
