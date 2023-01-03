@@ -1,4 +1,4 @@
-name: Feature Branch gitflow
+name: General Linting
 
 env:
   OPENBB_ENABLE_QUICK_EXIT: true
@@ -8,11 +8,7 @@ env:
   PIP_DEFAULT_TIMEOUT: 100
 
 on:
-  push:
-    branches:
-      - 'feature/*'
-      - 'hotfix/*'
-      - 'release/*'
+  workflow_dispatch
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,7 +16,7 @@ concurrency:
 
 jobs:
   linting:
-    name: General Linting
+    name: Linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
