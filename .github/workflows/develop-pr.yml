@@ -15,7 +15,7 @@ jobs:
   branch-name-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check branch name
+      - name: Check branch name and base branch
         run: |
           # Get the source and target branches for the PR
           SOURCE_BRANCH=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
@@ -24,12 +24,43 @@ jobs:
           echo "Source branch: $SOURCE_BRANCH"
           echo "Target branch: $TARGET_BRANCH"
 
-          if [[ "$SOURCE_BRANCH" =~ ^(main|feature/.*|hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]]; then
-            echo "Branch name is valid"
+          # Use a regular expression to match the pattern of main, feature, hotfix, and release branches
+          branch_pattern='^(main|feature/.*|hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$'
+
+          # Check if the source branch matches the pattern
+          if [[ "$SOURCE_BRANCH" =~ $branch_pattern ]]; then
+            # Check if the source branch is a release or feature branch
+            if [[ "$SOURCE_BRANCH" =~ ^(release/.*|feature/.*) ]]; then
+              # Get the commit that the branch was based on
+              SOURCE_COMMIT=$(git rev-parse HEAD)
+
+              # Check if the commit is on the develop branch
+              if git branch --contains $SOURCE_COMMIT | grep 'develop'; then
+                echo "Branch is based on develop branch"
+              else
+                echo "Branch is not based on develop branch"
+                exit 1
+              fi
+            # Check if the source branch is a hotfix branch
+            elif [[ "$SOURCE_BRANCH" =~ ^hotfix/.* ]]; then
+              # Get the commit that the branch was based on
+              SOURCE_COMMIT=$(git rev-parse HEAD)
+
+              # Check if the commit is on the main branch
+              if git branch --contains $SOURCE_COMMIT | grep 'main'; then
+                echo "Branch is based on main branch"
+              else
+                echo "Branch is not based on main branch"
+                exit 1
+              fi
+            else
+              echo "Branch is based on valid base branch"
+            fi
           else
             echo "Invalid branch name. Branches must follow the GitFlow naming convention to be allowed to merge into the develop branch."
             exit 1
           fi
+
 
   # Run tests on base Python version if Python code has changed
   base-test:

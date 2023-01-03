@@ -35,8 +35,22 @@ jobs:
 
           # Check if the source branch matches the pattern and the target branch is the main branch
           if [[ "$source_branch" =~ $hotfix_or_release_pattern ]] && [ "$target_branch" == "main" ]; then
+            
+            # Check if the source branch is a release branch
+            if [[ "$source_branch" =~ ^release/.* ]]; then
+              # Get the commit that the release branch was based on
+              source_commit=$(git rev-parse HEAD)
+
+              # Check if the commit is on the develop branch
+              if git branch --contains $source_commit | grep 'develop'; then
+                echo "Release branch was based on develop branch"
+              else
+                echo "Release branch was not based on develop branch"
+                exit 1
+              fi
+            
             # Check if the hotfix branch was based on the main branch
-            if [[ "$source_branch" =~ ^hotfix/.* ]]; then
+            elif [[ "$source_branch" =~ ^hotfix/.* ]]; then
               # Get the commit that the hotfix branch was based on
               source_commit=$(git rev-parse HEAD)
 
@@ -48,7 +62,8 @@ jobs:
                 exit 1
               fi
             else
-              echo "PR is from a release branch and targeting the main branch"
+              echo "PR is not from a hotfix or release branch. Pull requests must be from a hotfix or release branch and target the main branch"
+              exit 1
             fi
           else
             echo "PR is not from a hotfix or release branch. Pull requests must be from a hotfix or release branch and target the main branch"
