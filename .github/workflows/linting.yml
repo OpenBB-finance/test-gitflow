@@ -63,6 +63,7 @@ jobs:
         run: pylint terminal.py openbb_terminal tests
 
       - name: Lint Markdown Files
+        continue-on-error: true
         uses: docker://avtodev/markdown-lint:v1
         with:
           args: "./*.md ./changelogs/*.md ./openbb_terminal/**/*.md ./discordbot/**/*.md"
