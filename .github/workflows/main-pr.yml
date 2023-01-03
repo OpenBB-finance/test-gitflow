@@ -22,6 +22,9 @@ jobs:
   main-branch-pr-check:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
       - name: Check PR source and target branches
         run: |
           # Get the source and target branches for the PR

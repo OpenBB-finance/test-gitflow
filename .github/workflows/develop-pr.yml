@@ -15,6 +15,9 @@ jobs:
   branch-name-check:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@2
+
       - name: Check branch name and base branch
         run: |
           # Get the source and target branches for the PR
