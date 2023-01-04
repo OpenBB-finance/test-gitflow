@@ -46,7 +46,9 @@ jobs:
           fi
       
       - name: Show Output result for python-changes
-        run: echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
+        run: |
+          echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
+          echo "target-branch=${{ steps.check-target-branch.outputs.target-branch }}"
 
 # Run tests on base Python version if Python code has changed
   base-test:
