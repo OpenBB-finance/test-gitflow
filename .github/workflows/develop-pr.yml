@@ -1,4 +1,4 @@
-name: Develop branch gitflow
+name: Develop branch
 
 on:
   pull_request:
