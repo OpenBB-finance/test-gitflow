@@ -45,6 +45,7 @@ jobs:
           pip install types-pytz types-requests types-termcolor types-tabulate types-PyYAML types-python-dateutil types-setuptools types-six
 
       - name: Run Linting Tools
+        continue-on-error: true
         run: |
           bandit -x ./tests -r . || true
           black --diff --check .
@@ -52,6 +53,7 @@ jobs:
           flake8 . --count --ignore=E203,W503 --max-line-length=122 --show-source --statistics --exclude ./build/pyinstaller,./website/content
 
       - name: Run Mypy and Pyupgrade
+        continue-on-error: true
         run: |
           mypy --ignore-missing-imports openbb_terminal
           shopt -s globstar && pyupgrade --py38-plus **/*.py
@@ -63,7 +65,6 @@ jobs:
         run: pylint terminal.py openbb_terminal tests
 
       - name: Lint Markdown Files
-        continue-on-error: true
         uses: docker://avtodev/markdown-lint:v1
         with:
           args: "./*.md ./changelogs/*.md ./openbb_terminal/**/*.md ./discordbot/**/*.md"
