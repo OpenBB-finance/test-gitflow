@@ -45,7 +45,6 @@ jobs:
           echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
           echo "target-branch=${{ steps.check-target-branch.outputs.target-branch }}"
 
-  # Run tests on base Python version if Python code has changed
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: python-changes
@@ -91,7 +90,6 @@ jobs:
           source $VENV
           python terminal.py
 
-  # Run tests on python versions and OS
   tests-python:
     name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: [base-test]
@@ -150,11 +148,11 @@ jobs:
           source $VENV
           python terminal.py
 
-  # Run tests on conda environments
   tests-conda:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
-    needs: [base-test]
+    needs: [base-test, python-changes]
     runs-on: ${{ matrix.os }}-latest
+    if: steps.check-target-branch.outputs.target-branch == 'develop'
     strategy:
       fail-fast: false
       matrix:
@@ -170,7 +168,7 @@ jobs:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python }}
       PYTHONNOUSERSITE: 1
-      
+
     steps:
       - name: Set git to use LF
         if: runner.os == 'Windows'
