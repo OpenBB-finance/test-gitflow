@@ -37,6 +37,7 @@ jobs:
 # Run tests on base Python version if Python code has changed
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
+    needs: python-changes
     runs-on: ubuntu-latest
     if: ${{needs.python-changes.outputs.python-changes}} == 'true'
     steps:
