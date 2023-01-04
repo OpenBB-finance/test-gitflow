@@ -152,7 +152,7 @@ jobs:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: [python-changes]
     runs-on: ${{ matrix.os }}-latest
-    if: needs.check-target-branch.outputs.target-branch == 'develop'
+    if: needs.check-target-branch.outputs.target-branch == 'develop' && needs.python-changes.outputs.python-changes == 'false'
     strategy:
       fail-fast: false
       matrix:
