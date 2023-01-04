@@ -48,20 +48,20 @@ jobs:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: python-changes
     runs-on: ubuntu-latest
-    if: ${{ needs.python-changes.outputs.python-changes }} == 'true'
+    if: ${{ needs.python-changes.outputs.python-changes }} == 'false'
     steps:
       - name: Show Output result for python-changes
         run: echo "python-changes=${{ needs.python-changes.outputs.python-changes }}"
 
       - name: Setup Python 3.9
-        if: ${{ needs.python-changes.outputs.python-changes }} == 'true'
+        if: ${{ needs.python-changes.outputs.python-changes }} == 'false'
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
           architecture: x64
 
       - name: Install Poetry
-        if: ${{ needs.python-changes.outputs.python-changes }} == 'true'
+        if: ${{ needs.python-changes.outputs.python-changes }} == 'false'
         uses: snok/install-poetry@v1
         with:
           version: 1.1.13
