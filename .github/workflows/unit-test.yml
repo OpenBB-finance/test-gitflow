@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      
+
       # Get the target branch name and store it as an output
       - name: Get target branch name
         id: check-target-branch
@@ -39,7 +39,7 @@ jobs:
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Show Output result for python-changes
         run: |
           echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
@@ -90,7 +90,7 @@ jobs:
         run: |
           source $VENV
           python terminal.py
-  
+
   # Run tests on python versions and OS
   tests-python:
     name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -149,7 +149,7 @@ jobs:
         run: |
           source $VENV
           python terminal.py
-  
+
   # Run tests on conda environments
   tests-conda:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -170,6 +170,7 @@ jobs:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python }}
       PYTHONNOUSERSITE: 1
+      
     steps:
       - name: Set git to use LF
         if: runner.os == 'Windows'
