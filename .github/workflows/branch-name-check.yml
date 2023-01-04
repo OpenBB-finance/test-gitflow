@@ -1,5 +1,5 @@
-# Name: Branch Name Check
-# Description: Checks that the source branch name is valid for the target branch
+name: Branch Name Check
+# Description: Checks that the source branch name is valid for the target branch. This is used to ensure that PRs are only allowed to merge into the develop branch if they are from a feature, hotfix or release branch. Similarly, PRs are only allowed to merge into the main branch if they are from a hotfix or release branch.
 
 on:
   pull_request:
