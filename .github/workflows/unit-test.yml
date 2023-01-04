@@ -38,7 +38,7 @@ jobs:
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
     runs-on: ubuntu-latest
-    if: steps.python-changes.outputs.python-changes == 'true'
+    if: ${{needs.python-changes.outputs.python-changes}} == 'true'
     steps:
       - name: Setup Python 3.9
         uses: actions/setup-python@v4
