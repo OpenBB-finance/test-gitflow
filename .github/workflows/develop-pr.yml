@@ -24,7 +24,7 @@ jobs:
           echo "Source branch: $source_branch"
           echo "Target branch: $target_branch"
 
-          if [[ "$source_branch" =~ ^(main|feature/.*|hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]] && ["$target_branch" == "develop"]; then
+          if [[ "$source_branch" == ^(main|feature/.*|hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]] && ["$target_branch" == "develop"]; then
             echo "Branch name is valid and PR is targeting the develop branch."
           else
             echo "Invalid branch name. Branches must follow the GitFlow naming convention to be allowed to merge into the develop branch."
