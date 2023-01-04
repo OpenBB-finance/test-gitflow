@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
-      target-branch: ${{ steps.python-changes.outputs.target-branch }}
+      target-branch: ${{ steps.check-target-branch.outputs.target-branch }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
       
       # Get the target branch name and store it as an output
       - name: Get target branch name
-        id: python-changes
+        id: check-target-branch
         run: |
           target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
           echo "target-branch=$target_branch" >> $GITHUB_OUTPUT
