@@ -15,17 +15,17 @@ jobs:
   branch-name-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check branch name
+      - name: Checking branch name
         run: |
-          # Get the source and target branches for the PR
-          SOURCE_BRANCH=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
-          TARGET_BRANCH=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
+          # Extract the source and target branches for the PR
+          source_branch=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
+          target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
 
-          echo "Source branch: $SOURCE_BRANCH"
-          echo "Target branch: $TARGET_BRANCH"
+          echo "Source branch: $source_branch"
+          echo "Target branch: $target_branch"
 
-          if [[ "$SOURCE_BRANCH" =~ ^(main|feature/.*|hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]]; then
-            echo "Branch name is valid"
+          if [[ "$source_branch" =~ ^(main|feature/.*|hotfix/.*|release/[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?)$ ]] && ["$target_branch" == "develop"]; then
+            echo "Branch name is valid and PR is targeting the develop branch."
           else
             echo "Invalid branch name. Branches must follow the GitFlow naming convention to be allowed to merge into the develop branch."
             exit 1
