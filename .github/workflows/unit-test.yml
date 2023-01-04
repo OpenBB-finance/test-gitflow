@@ -42,7 +42,7 @@ jobs:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: python-changes
     runs-on: ubuntu-latest
-    if: ${{needs.python-changes.outputs.python-changes}} == 'true'
+    if: ${{ needs.python-changes.outputs.python-changes }} == 'true'
     steps:
       - name: Show Output result for python-changes
         run: echo "python-changes=${{ needs.python-changes.outputs.python-changes }}"
