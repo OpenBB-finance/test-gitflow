@@ -23,11 +23,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
       
-      # Fetch the latest code from both the source and target branches
-      - name: Fetch latest code
-        run: |
-          git fetch
-      
       # Get the target branch name and store it as an output
       - name: Get target branch name
         id: check-target-branch
@@ -50,7 +45,7 @@ jobs:
           echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
           echo "target-branch=${{ steps.check-target-branch.outputs.target-branch }}"
 
-# Run tests on base Python version if Python code has changed
+  # Run tests on base Python version if Python code has changed
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: python-changes
@@ -96,7 +91,7 @@ jobs:
           source $VENV
           python terminal.py
   
-  # Run tests on vanilla Python
+  # Run tests on python versions and OS
   tests-python:
     name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: [base-test]
@@ -155,7 +150,7 @@ jobs:
           source $VENV
           python terminal.py
   
-  # Run tests on conda
+  # Run tests on conda environments
   tests-conda:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: [base-test]
