@@ -1,11 +1,8 @@
 name: Develop branch
 
 on:
-  pull_request:
-    types: [opened, synchronize]
-    branches:
-      - develop
-
+  workflow_dispatch:
+  
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

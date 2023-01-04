@@ -1,4 +1,5 @@
-name: Check Branch Name Pattern
+# Name: Branch Name Check
+# Description: Checks that the source branch name is valid for the target branch
 
 on:
   pull_request:
