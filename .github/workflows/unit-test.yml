@@ -12,27 +12,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  extract_branches:
-    name: Extract source and target branches
-    runs-on: ubuntu-latest
-    steps:
-      - name: Extract source and target branches
-        id: branch-names
-        uses: actions/create-branch-name-check-action@v1
-        with:
-          payload: ${{ toJson(github) }}
-
-      - name: Do something with the extracted branches
-        run: |
-          echo "Source branch: ${{ steps.branch-names.outputs.source_branch }}"
-          echo "Target branch: ${{ steps.branch-names.outputs.target_branch }}"
-
   # Check for changes to Python code
   python-changes:
     name: Check for changes to Python code
     runs-on: ubuntu-latest
     outputs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
+      target-branch: ${{ steps.python-changes.outputs.target-branch }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -41,6 +27,13 @@ jobs:
       - name: Fetch latest code
         run: |
           git fetch
+      
+      # Get the target branch name and store it as an output
+      - name: Get target branch name
+        id: python-changes
+        run: |
+          target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
+          echo "target-branch=$target_branch" >> $GITHUB_OUTPUT
 
       # Check for changes to Python code to avoid running tests unnecessarily
       - name: Check for changes to Python code
