@@ -12,13 +12,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Call the branch-name-check workflow to extract the source and target branches for the PR
-  branch-name-check:
-    uses: OpenBB-finance/test-gitflow/.github/workflows/branch-name-check.yml@develop
-    with:
-      source-branch: ${{ github.head_ref }}
-      target-branch: ${{ github.base_ref }}
+  extract_branches:
+    name: Extract source and target branches
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract source and target branches
+        id: branch-names
+        uses: actions/create-branch-name-check-action@v1
+        with:
+          payload: ${{ toJson(github) }}
 
+      - name: Do something with the extracted branches
+        run: |
+          echo "Source branch: ${{ steps.branch-names.outputs.source_branch }}"
+          echo "Target branch: ${{ steps.branch-names.outputs.target_branch }}"
 
   # Check for changes to Python code
   python-changes:
