@@ -24,7 +24,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      
+      # Fetch the latest code from both the source and target branches
+      - name: Fetch latest code
+        run: |
+          git fetch
 
+      # Check for changes to Python code to avoid running tests unnecessarily
       - name: Check for changes to Python code
         id: python-changes
         run: |
