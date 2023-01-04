@@ -34,7 +34,7 @@ jobs:
       - name: Check for changes to Python code
         id: python-changes
         run: |
-          if git diff --name-only $SOURCE_BRANCH $TARGET_BRANCH | grep -E '.*\.py$'; then
+          if git diff --name-only $SOURCE_BRANCH $TARGET_BRANCH | grep -e '.*\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
@@ -48,20 +48,20 @@ jobs:
     name: Base Tests - Ubuntu-latest - Python 3.9
     needs: python-changes
     runs-on: ubuntu-latest
-    if: ${{ needs.python-changes.outputs.python-changes }} == 'false'
+    if: ${{ needs.python-changes.outputs.python-changes }} != 'false'
     steps:
       - name: Show Output result for python-changes
         run: echo "python-changes=${{ needs.python-changes.outputs.python-changes }}"
 
       - name: Setup Python 3.9
-        if: ${{ needs.python-changes.outputs.python-changes }} == 'false'
+        if: ${{ needs.python-changes.outputs.python-changes }} != 'false'
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
           architecture: x64
 
       - name: Install Poetry
-        if: ${{ needs.python-changes.outputs.python-changes }} == 'false'
+        if: ${{ needs.python-changes.outputs.python-changes }} != 'false'
         uses: snok/install-poetry@v1
         with:
           version: 1.1.13
