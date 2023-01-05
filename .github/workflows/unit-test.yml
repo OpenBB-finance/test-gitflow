@@ -22,8 +22,9 @@ jobs:
     outputs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
     steps:
-      # Extract the source and target branches for the PR
-      
+      - name: Checkout Code
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+
       # Check for changes to Python code to avoid running tests unnecessarily
       - name: Check for changes to Python code
         id: python-changes
@@ -32,8 +33,6 @@ jobs:
           source_branch=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
           target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
 
-          git checkout $source_branch
-          git fetch origin $target_branch
           if git diff --name-only $source_branch $(git merge-base $source_branch $target_branch) | grep -E '\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
