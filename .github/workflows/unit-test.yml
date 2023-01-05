@@ -35,7 +35,9 @@ jobs:
           source_branch=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
           target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
 
-          if git diff --name-only $source_branch $(git merge-base $source_branch $target_branch) | grep -E '(\.py$)'; then
+          git checkout $source_branch
+          git fetch origin $target_branch
+          if git diff --name-only $source_branch $(git merge-base $source_branch $target_branch) | grep -E '\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
