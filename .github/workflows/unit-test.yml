@@ -34,7 +34,7 @@ jobs:
           target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
 
           # Check if the source_branch contain any changes to python code
-          git diff --name-only $source_branch..$target_branch -- "*.py" > changes.txt
+          git diff --name-only $target_branch..$source_branch -- "*.py" > changes.txt
 
           # Search for changes to python files
           grep -E '\.py$' changes.txt > python-changes.txt
