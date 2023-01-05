@@ -147,7 +147,7 @@ jobs:
     name: Full Test Suite - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: [base-test]
     runs-on: ${{ matrix.os }}
-    if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     strategy:
       fail-fast: true
       matrix:
@@ -206,7 +206,7 @@ jobs:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: [base-test]
     runs-on: ${{ matrix.os }}-latest
-    if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     strategy:
       fail-fast: false
       matrix:
