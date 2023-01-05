@@ -24,15 +24,19 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      
+      # Extract the branch name from $GITHUB_REF
+      - name: Extract branch name
+        id: branch-name
+        run: |
+          branch_name=$(echo "$GITHUB_REF" | cut -d '/' -f 3)
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
 
       # Check for changes to Python code to avoid running tests unnecessarily
       - name: Check for changes to Python code
         id: python-changes
         run: |
-          source_branch=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
-          target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
-
-          if git diff --name-only $source_branch $target_branch | grep -qE '.*\.py$'; then
+          if git diff --name-only HEAD $branch_name | grep -e '.*\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
