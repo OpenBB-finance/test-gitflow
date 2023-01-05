@@ -23,7 +23,7 @@ jobs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v1
 
       # Check for changes to Python code to avoid running tests unnecessarily
       - name: Check for changes to Python code
@@ -34,7 +34,7 @@ jobs:
           target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
 
           # Check for changes to Python code to avoid running tests unnecessarily
-          if git diff $target_branch...$source_branch | grep -qE '\.py$'; then
+          if git diff --name-only $(git rev-parse $source_branch) $(git rev-parse $(git merge-base $source_branch $target_branch)) | grep -qE '\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
