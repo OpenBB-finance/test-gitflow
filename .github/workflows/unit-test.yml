@@ -8,8 +8,7 @@ on:
     types: [opened, synchronize]
   workflow_run:
     workflows: [Branch Name Check]
-    types: [requested]
-    branches: [develop]
+    types: [completed]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
