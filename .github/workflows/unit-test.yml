@@ -9,6 +9,9 @@ on:
   workflow_run:
     workflows: [Branch Name Check]
     types: [completed]
+    branches:
+      - develop
+      - main
 
 
 concurrency:
