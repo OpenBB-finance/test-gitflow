@@ -1,14 +1,14 @@
 name: Unit Test
 
 on:
-  workflow_run:
-    workflows: [Branch Name Check]
-    types: [completed]
   pull_request:
     branches:
       - develop
       - main
     types: [opened, synchronize]
+  workflow_run:
+    workflows: [Branch Name Check]
+    types: [completed]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
