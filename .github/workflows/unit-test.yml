@@ -19,7 +19,7 @@ jobs:
   python-changes:
     name: Check for changes to Python code
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     outputs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
       target-branch: ${{ steps.check-target-branch.outputs.target-branch }}
