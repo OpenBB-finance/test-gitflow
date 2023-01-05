@@ -25,6 +25,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Extract the source and target branches for the PR
+      
       # Check for changes to Python code to avoid running tests unnecessarily
       - name: Check for changes to Python code
         id: python-changes
@@ -33,19 +35,11 @@ jobs:
           source_branch=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
           target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
 
-          # Check if the source_branch contain any changes to python code
-          git diff --name-only $target_branch..$source_branch -- "*.py" > changes.txt
-
-          # Search for changes to python files
-          grep -E '\.py$' changes.txt > python-changes.txt
-
-          # Check if the python_changes.txt file is empty
-          if [ ! -s python_changes.txt ]
-          then
+          if git diff --name-only $source_branch $(git merge-base $source_branch $target_branch) | grep -E '(\.py$)'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
-          fi            
+          fi
 
       - name: Show Output result for python-changes
         run: |
