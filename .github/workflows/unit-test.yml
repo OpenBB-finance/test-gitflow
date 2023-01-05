@@ -36,7 +36,7 @@ jobs:
       - name: Check for changes to Python code
         id: python-changes
         run: |
-          if git diff --name-only HEAD $branch_name | grep -e '.*\.py$'; then
+          if git diff --name-only HEAD $(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH") | grep -qE '\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
