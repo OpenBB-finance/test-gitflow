@@ -8,5 +8,3 @@ if __name__ == "__main__":
         integration_testing.parse_args_and_run()
     else:
         terminal_controller.parse_args_and_run()
-
-# Testing gitflow
