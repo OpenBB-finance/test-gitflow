@@ -21,17 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
-      target-branch: ${{ steps.check-target-branch.outputs.target-branch }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
-      # Get the target branch name and store it as an output
-      - name: Get target branch name
-        id: check-target-branch
-        run: |
-          target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
-          echo "target-branch=$target_branch" >> $GITHUB_OUTPUT
 
       # Check for changes to Python code to avoid running tests unnecessarily
       - name: Check for changes to Python code
@@ -46,13 +38,12 @@ jobs:
       - name: Show Output result for python-changes
         run: |
           echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
-          echo "target-branch=${{ steps.check-target-branch.outputs.target-branch }}"
 
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
-    needs: python-changes
+    needs: [python-changes]
     runs-on: ubuntu-latest
-    if: needs.python-changes.outputs.python-changes == 'true'
+    if: needs.python-changes.outputs.python-changes == 'false'
     steps:
       - name: Show Output result for python-changes
         run: echo "python-changes=${{ needs.python-changes.outputs.python-changes }}"
@@ -95,9 +86,9 @@ jobs:
 
   tests-python:
     name: Vanilla Python Tests - ${{ matrix.python-version }}
-    needs: [python-changes]
+    needs: [python-changes, base-test]
     runs-on: ${{ matrix.os }}
-    if: needs.python-changes.outputs.python-changes == 'false' && github.event.pull_request.base.ref == 'develop'
+    if: needs.python-changes.outputs.python-changes == 'true' && github.event.pull_request.base.ref == 'develop'
     strategy:
       fail-fast: true
       matrix:
@@ -213,9 +204,9 @@ jobs:
 
   tests-conda:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
-    # needs: [base-test]
+    needs: [base-test]
     runs-on: ${{ matrix.os }}-latest
-    if: github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    if: github.event.action == 'closed' && github.event.pull_request.merged == true
     strategy:
       fail-fast: false
       matrix:
