@@ -10,6 +10,7 @@ on:
     workflows: [Branch Name Check]
     types: [completed]
 
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -34,7 +35,11 @@ jobs:
           target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
 
           # Check for changes to Python code to avoid running tests unnecessarily
-          if git diff --name-only origin/$target_branch HEAD | grep -qE '\.py$'; then
+          # if git diff --name-only origin/$target_branch HEAD | grep -qE '\.py$'; then
+
+          git fetch origin $target_branch:refs/remotes/origin/$target_branch
+
+          if git diff --name-only "$source_branch..origin/$target_branch" | grep -E '\.py$'; then
             echo "python-changes=true" >> $GITHUB_OUTPUT
           else
             echo "python-changes=false" >> $GITHUB_OUTPUT
