@@ -22,9 +22,6 @@ jobs:
     outputs:
       python-changes: ${{ steps.python-changes.outputs.python-changes }}
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
       # Extract the source and target branches for the PR
       
       # Check for changes to Python code to avoid running tests unnecessarily
