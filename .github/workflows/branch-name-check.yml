@@ -7,7 +7,6 @@ on:
       - develop
       - master
     types: [opened, synchronize]
-  workflow_call:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
