@@ -95,7 +95,7 @@ jobs:
     name: Vanilla Python Tests - ${{ matrix.python-version }}
     needs: [python-changes]
     runs-on: ${{ matrix.os }}
-    if: needs.python-changes.outputs.python-changes == 'false' github.event.pull_request.base.ref == 'develop'
+    if: needs.python-changes.outputs.python-changes == 'false' && github.event.pull_request.base.ref == 'develop'
     strategy:
       fail-fast: true
       matrix:
