@@ -6,10 +6,6 @@ on:
       - develop
       - main
     types: [opened, synchronize]
-  workflow_run:
-    workflows: ["Branch Name Check"]
-    types: [requested]
-    branches: [develop, main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -96,9 +92,69 @@ jobs:
           python terminal.py
 
   tests-python:
-    name: Vanilla Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
+    name: Vanilla Python Tests - ${{ matrix.python-version }}
+    needs: [python-changes]
+    runs-on: ${{ matrix.os }}
+    if: needs.python-changes.outputs.python-changes == 'false' github.event.pull_request.base.ref == 'develop'
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+        os: [ubuntu-latest]
+        exclude:
+          - os: ubuntu-latest
+            python-version: "3.9"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.1.13
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-v1-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction -E optimization
+
+      - name: List installed packages
+        shell: bash -l {0}
+        run: |
+          source $VENV
+          pip list
+
+      - name: Run tests
+        env:
+          MPLBACKEND: Agg
+        run: |
+          source $VENV
+          pytest tests/ --optimization
+
+      - name: Start Terminal and exit
+        run: |
+          source $VENV
+          python terminal.py
+  
+  full-test:
+    name: Full Test Suite - (${{ matrix.python-version }}, ${{ matrix.os }})
     needs: [base-test]
     runs-on: ${{ matrix.os }}
+    if: github.event.action == 'closed' && github.event.pull_request.merged == true
     strategy:
       fail-fast: true
       matrix:
@@ -155,9 +211,9 @@ jobs:
 
   tests-conda:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
-    needs: [python-changes, base-test]
+    # needs: [base-test]
     runs-on: ${{ matrix.os }}-latest
-    if: needs.python-changes.outputs.target-branch == 'main'
+    if: github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     strategy:
       fail-fast: false
       matrix:
