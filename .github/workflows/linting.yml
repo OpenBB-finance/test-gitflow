@@ -20,8 +20,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  run-linting-tools:
-    name: General Linting
+  code-linting:
+    name: Running General Linting Tools
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
