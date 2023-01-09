@@ -1,5 +1,12 @@
 name: Unit Test
 
+env:
+  OPENBB_ENABLE_QUICK_EXIT: true
+  OPENBB_LOG_COLLECT: false
+  OPENBB_USE_ION: false
+  OPENBB_USE_PROMPT_TOOLKIT: false
+  PIP_DEFAULT_TIMEOUT: 100
+
 on:
   pull_request:
     branches:
@@ -49,8 +56,8 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.python-changes.outputs.python-changes == 'true'
     steps:
-      - name: Show Output result for python-changes
-        run: echo "python-changes=${{ needs.python-changes.outputs.python-changes }}"
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
       - name: Setup Python 3.9
         uses: actions/setup-python@v4
