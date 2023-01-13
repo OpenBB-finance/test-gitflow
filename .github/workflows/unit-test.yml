@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check-for-changes:
+  check-files-changed:
     name: Check for changes to python files and the openbb_terminal folder
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged != true
@@ -82,9 +82,9 @@ jobs:
 
   base-test:
     name: Base Tests - Ubuntu-latest - Python 3.9
-    needs: [python-changes]
+    needs: [check-files-changed]
     runs-on: ubuntu-latest
-    if: needs.check-for-changes.outputs.check-changes == 'true' && github.event.pull_request.base.ref == 'develop'
+    if: needs.check-files-changed.outputs.check-changes == 'true' && github.event.pull_request.base.ref == 'develop'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -127,7 +127,7 @@ jobs:
 
   tests-python:
     name: Vanilla Python Tests - ${{ matrix.python-version }}
-    needs: [python-changes, base-test]
+    needs: [check-files-changed, base-test]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
