@@ -365,4 +365,3 @@ def is_reset(command: str) -> bool:
     if command == "r\n":
         return True
     return False
-    
