@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   check-files-changed:
-    name: Check for changes to python files and the openbb_terminal folder
+    name: Check for changes
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged != true
     outputs:
@@ -52,7 +52,7 @@ jobs:
       #     fi
 
       # Check for changes to python files, lockfiles and the openbb_terminal folder
-      - name: Check for changes
+      - name: Check for changes to files to trigger unit test
         id: check-changes
         run: |
           source_branch=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
@@ -74,7 +74,7 @@ jobs:
       #       echo "check-changes=false" >> $GITHUB_OUTPUT
       #     fi
 
-      - name: Show Output result for python-changes
+      - name: Show output of previous step
         run: |
           # echo "python-changes=${{ steps.python-changes.outputs.python-changes }}"
           # echo "folder-changes=${{ steps.folder-changes.outputs.folder-changes }}"
