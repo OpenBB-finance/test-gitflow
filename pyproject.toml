@@ -151,7 +151,6 @@ build-backend = "poetry.core.masonry.api"
 convention = "numpy"
 match = '((?!test_).)*\.py'
 
-
 [tool.ruff]
 line-length = 122
 target-version = "py38"
