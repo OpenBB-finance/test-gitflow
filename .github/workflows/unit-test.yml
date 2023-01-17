@@ -13,6 +13,9 @@ on:
       - develop
       - main
     types: [opened, synchronize, edited, closed]
+  push:
+    branches:
+      - release/*
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -24,8 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged != true
     outputs:
-      # python-changes: ${{ steps.python-changes.outputs.python-changes }}
-      # folder-changes: ${{ steps.folder-changes.outputs.folder-changes }}
       check-changes: ${{ steps.check-changes.outputs.check-changes }}
     steps:
       - name: Checkout
@@ -35,21 +36,6 @@ jobs:
           # The GitHub token is preserved by default but this job doesn't need
           # to be able to push to GitHub.
           persist-credentials: false
-
-      # Check for changes to Python files to avoid running tests unnecessarily
-      # - name: python file check
-      #   id: python-changes
-      #   run: |
-      #     # Extract the source and target branches for the PR
-      #     source_branch=$(jq -r .pull_request.head.ref "$GITHUB_EVENT_PATH")
-      #     target_branch=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
-
-      #     # Check for changes to Python code to avoid running tests unnecessarily
-      #     if git diff --name-only origin/$target_branch HEAD | grep -E "\.py$"; then
-      #       echo "python-changes=true" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "python-changes=false" >> $GITHUB_OUTPUT
-      #     fi
 
       # Check for changes to python files, lockfiles and the openbb_terminal folder
       - name: Check for changes to files to trigger unit test
@@ -63,16 +49,6 @@ jobs:
           else
             echo "check-changes=false" >> $GITHUB_OUTPUT
           fi
-      
-      # combine the two checks into one
-      # - name: Check for changes to python files or the openbb_terminal folder
-      #   id: check-changes
-      #   run: |
-      #     if [ ${{ steps.python-changes.outputs.python-changes }} == 'true' ] || [ ${{ steps.folder-changes.outputs.folder-changes }} == 'true' ]; then
-      #       echo "check-changes=true" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "check-changes=false" >> $GITHUB_OUTPUT
-      #     fi
 
       - name: Show output of previous step
         run: |
@@ -186,7 +162,8 @@ jobs:
   full-test:
     name: Full Test Suite - (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    if: github.event.pull_request.merged == true
+    # Run only when a PR is merged or a push to release/* branch
+    if: github.event.pull_request.merged == true || (github.event.ref == 'refs/heads/release/*' && github.event.action == 'push')
     strategy:
       fail-fast: true
       matrix:
@@ -244,7 +221,7 @@ jobs:
   tests-conda:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true || (github.event.ref == 'refs/heads/release/*' && github.event.action == 'push')
     strategy:
       fail-fast: false
       matrix:
