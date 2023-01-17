@@ -163,7 +163,6 @@ jobs:
     name: Full Test Suite - (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     # Run only when a PR is merged or a push to release/* branch
-    if: github.event.ref == 'refs/heads/release/*' && github.event.action == 'push'
     strategy:
       fail-fast: true
       matrix:
