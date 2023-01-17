@@ -38,6 +38,7 @@ jobs:
           conda init
           conda activate obb
           conda env list
+
       - name: Poetry Install
         # Conda activate needs to be run every time because of the way that the workflow steps work
         # on powershell where it creates a new shell every time for every step
