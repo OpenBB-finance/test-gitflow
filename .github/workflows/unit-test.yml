@@ -25,7 +25,7 @@ jobs:
   check-files-changed:
     name: Check for changes
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged != true
+    if: github.event.pull_request.merged != true && github.event != 'push'
     outputs:
       check-changes: ${{ steps.check-changes.outputs.check-changes }}
     steps:
@@ -221,7 +221,7 @@ jobs:
   tests-conda:
     name: Anaconda Python Tests - (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}-latest
-    if: github.event.pull_request.merged == true || (github.event.ref == 'refs/heads/release/*' && github.event.action == 'push')
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
     strategy:
       fail-fast: false
       matrix:
